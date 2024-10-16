@@ -50,13 +50,6 @@ class CreateStructure:
                     clear_screen()
                     print_welcome_message()
                     print_invalid_value(choice_structure)
-            
-            except ValueError:
-                        sleep(0.8)
-                        clear_screen()
-                        print_welcome_message()
-                        print_invalid_value(choice_structure)
-
 
             except KeyboardInterrupt:
                     sleep(0.8)
@@ -64,6 +57,12 @@ class CreateStructure:
                     print_welcome_message()
                     print_interrupted_message()
                     sys.exit(1)
+
+            except Exception:
+                        sleep(0.8)
+                        clear_screen()
+                        print_welcome_message()
+                        print_invalid_value(choice_structure)
 
     def pull_structure(self):
         choice_structure = self.choice_structure()
@@ -102,7 +101,7 @@ class CreateStructure:
         
         except Exception:
             sleep(0.8)
-            print_subdirectory_error()
+            print_error_unexpected()
             
     def create_virtualenv(self):
         try:
@@ -123,7 +122,7 @@ class CreateStructure:
 
         except Exception:
             sleep(0.8)
-            print_environment_error(virtualenv_path)
+            print_error_unexpected()
     
     def execute(self):
         try:
@@ -145,6 +144,11 @@ class CreateStructure:
         except KeyboardInterrupt:
             sleep(0.8)
             print_interrupted_message()
+            sys.exit(1)
+
+        except Exception:
+            sleep(0.8)
+            print_error_unexpected()
             sys.exit(1)
 
 CreateStructure().execute()
