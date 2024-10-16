@@ -11,12 +11,13 @@ class CreateStructure:
     
     def concatenate_paths(self, project_name):
         current_directory = self.get_current_directory()
-        new_directory_path = os.path.join(current_directory, self.root_directory, project_name)
-        return new_directory_path
-    
+        return os.path.join(current_directory, self.root_directory, project_name)
+        
     def check_directory_exists(self, project_name):
-        new_directory_path = self.concatenate_paths(project_name)
-        self.directory_not_exists = not os.path.exists(new_directory_path)
+        self.new_directory_path = self.concatenate_paths(project_name)
+        self.directory_not_exists = not os.path.exists(self.new_directory_path)
         return self.directory_not_exists
     
     
+
+
