@@ -1,5 +1,7 @@
 import os
 
+from docs.structures import *
+
 class CreateStructure:
     def __init__(self):
         self.root_directory: str = "projects"
@@ -24,8 +26,26 @@ class CreateStructure:
         
         else:
             pass
-
     
+    def choice_structure(self):
+        choice_structure = int(input('$ '))
+        return choice_structure
     
+    def pull_structure(self):
+        choice_structure = self.choice_structure()
+        match choice_structure:
+            case 1:
+                self.subdirectories = STRUCTURE_ONE
+            
+            case _:
+                pass
+                
+    def create_subdirectories(self):
+        for subdirectory, subsubdirs in self.subdirectories.items():
+            subdirectory_path = os.path.join(self.new_directory_path, subdirectory)
+            os.makedirs(subdirectory_path, exist_ok=True)
 
-
+            for subsubdir in subsubdirs:
+                subsubdirectory_path = os.path.join(subdirectory_path, subsubdir)
+                os.makedirs(subsubdirectory_path, exist_ok=True)
+                
