@@ -18,6 +18,14 @@ class CreateStructure:
         self.directory_not_exists = not os.path.exists(self.new_directory_path)
         return self.directory_not_exists
     
+    def create_root_directory(self):
+        if self.directory_not_exists:
+            os.makedirs(self.new_directory_path, exist_ok=True)
+        
+        else:
+            pass
+
+    
     
 
 
