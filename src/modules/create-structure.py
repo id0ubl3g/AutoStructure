@@ -3,6 +3,7 @@ import subprocess
 import sys
 
 from docs.structures import *
+from src.utils.system_utils import *
 
 class CreateStructure:
     def __init__(self):
@@ -62,4 +63,22 @@ class CreateStructure:
 
         else:
             pass
+    
+    def execute(self):
+        try:
+            args = parse_arguments()
+            if not args.project_name:
+                sys.exit(1)
+
+            self.project_name = args.project_name
+            self.check_directory_exists(self.project_name)
+            self.create_root_directory()
+            self.pull_structure()
+            self.create_subdirectories()
+            self.create_virtualenv()
         
+        except KeyboardInterrupt:
+            sys.exit(1)
+
+
+CreateStructure().execute()
