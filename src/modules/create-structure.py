@@ -1,4 +1,6 @@
 import os
+import subprocess
+import sys
 
 from docs.structures import *
 
@@ -48,4 +50,16 @@ class CreateStructure:
             for subsubdir in subsubdirs:
                 subsubdirectory_path = os.path.join(subdirectory_path, subsubdir)
                 os.makedirs(subsubdirectory_path, exist_ok=True)
-                
+    
+    def create_virtualenv(self):
+        virtualenv_path = os.path.join(self.new_directory_path, '.venv')
+        if not os.path.exists(virtualenv_path):
+            try:
+                subprocess.check_call([sys.executable, '-m', 'venv', virtualenv_path])
+            
+            except Exception:
+                pass
+
+        else:
+            pass
+        
