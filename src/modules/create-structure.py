@@ -1,8 +1,7 @@
-import subprocess
 from time import sleep
 import sys
+import venv
 import os
-
 from src.utils.system_utils import *
 from src.utils.style_output import *
 from docs.structures import *
@@ -110,7 +109,7 @@ class CreateStructure:
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
             if not os.path.exists(virtualenv_path):          
                 sleep(0.8)
-                subprocess.check_call([sys.executable, '-m', 'venv', virtualenv_path])
+                venv.create(virtualenv_path, with_pip=True)
                 print_create_environment(virtualenv_path)
 
             else:
