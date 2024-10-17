@@ -1,11 +1,10 @@
-import subprocess
 from time import sleep
 import sys
+import venv
 import os
-
 from src.utils.system_utils import *
 from src.utils.style_output import *
-from docs.structures import *
+from config.structures import *
 
 class CreateStructure:
     def __init__(self):
@@ -39,25 +38,18 @@ class CreateStructure:
     def choice_structure(self):
         while True:
             try:
+                print_project_options()
                 choice_structure = input(F'{CYAN}\n[$] {RESET}')
                 
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
                     return choice_structure
                 
-                
                 else:
                     sleep(0.8)
                     clear_screen()
                     print_welcome_message()
                     print_invalid_value(choice_structure)
-            
-            except ValueError:
-                        sleep(0.8)
-                        clear_screen()
-                        print_welcome_message()
-                        print_invalid_value(choice_structure)
-
 
             except KeyboardInterrupt:
                     sleep(0.8)
@@ -66,12 +58,30 @@ class CreateStructure:
                     print_interrupted_message()
                     sys.exit(1)
 
+            except Exception:
+                        sleep(0.8)
+                        clear_screen()
+                        print_welcome_message()
+                        print_invalid_value(choice_structure)
+
     def pull_structure(self):
         choice_structure = self.choice_structure()
         match choice_structure:
             case 1:
                 sleep(0.8)
-                self.subdirectories = STRUCTURE_ONE
+                self.subdirectories = SCALABLE_STRUCTURE
+                clear_screen()
+                print_welcome_message()
+
+            case 2:
+                sleep(0.8)
+                self.subdirectories = API_CLEAN_STRUCTURE
+                clear_screen()
+                print_welcome_message()
+
+            case 3:
+                sleep(0.8)
+                self.subdirectories = SITE_STRUCTURE
                 clear_screen()
                 print_welcome_message()
             
@@ -103,14 +113,14 @@ class CreateStructure:
         
         except Exception:
             sleep(0.8)
-            print_subdirectory_error()
+            print_error_unexpected()
             
     def create_virtualenv(self):
         try:
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
             if not os.path.exists(virtualenv_path):          
                 sleep(0.8)
-                subprocess.check_call([sys.executable, '-m', 'venv', virtualenv_path])
+                venv.create(virtualenv_path, with_pip=True)
                 print_create_environment(virtualenv_path)
 
             else:
@@ -124,7 +134,7 @@ class CreateStructure:
 
         except Exception:
             sleep(0.8)
-            print_environment_error(virtualenv_path)
+            print_error_unexpected()
     
     def execute(self):
         try:
@@ -146,6 +156,11 @@ class CreateStructure:
         except KeyboardInterrupt:
             sleep(0.8)
             print_interrupted_message()
+            sys.exit(1)
+
+        except Exception:
+            sleep(0.8)
+            print_error_unexpected()
             sys.exit(1)
 
 CreateStructure().execute()

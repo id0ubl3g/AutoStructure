@@ -31,9 +31,6 @@ def print_directory_exists(directory_name): #ALTERNATIVE
 def print_create_subdirectory(subdirectory):
     print(f'\n{CYAN}[+]{RESET} Creating subdirectory: {WHITE}{subdirectory}{RESET}')
 
-def print_subdirectory_error():
-    print(f'\n{RED}[x]{RESET} Failed to create one or more subdirectories.{RESET}')
-
 def print_create_environment(virtualenv_path):
     print(f'\n{CYAN}[+]{RESET} Virtual environment created at: {WHITE}{virtualenv_path}{RESET}')
 
@@ -44,7 +41,7 @@ def print_environment_error(virtualenv_path):
     print(f'\n{RED}[x]{RESET} Failed to create virtual environment at: {WHITE}{virtualenv_path}{RESET}')
 
 def print_interrupted_message():
-    print(f'\n{ORANGE}[!]{RESET} Operation interrupted by user. Exiting gracefully...{RESET}')
+    print(f'\n{ORANGE}[!]{RESET} Operation interrupted by user. Exiting gracefully...')
 
 def print_structure_created(directory_name):
     print(f'\n{CYAN}[+]{RESET} Project structure created successfully at: {WHITE}{directory_name}{RESET}')
@@ -54,3 +51,14 @@ def print_structure_exists(directory_name): #ALTERNATIVE
 
 def print_invalid_value(message):  # Função para imprimir mensagem de valor inválido
     print(f'\n{ORANGE}[i]{RESET} Invalid value: {WHITE}{message}{RESET}')
+
+def print_error_unexpected():
+    print(f'\n{RED}[x]{RESET} An unexpected error occurred.')
+
+def print_project_options():
+    print(f'\n{CYAN}[+]{RESET}{BOLD} Select a project structure to set up:{RESET}\n')
+    print(f'{CYAN}[1]{RESET} Scalabre Structure: Basic scalable structure{RESET}')
+    print(f'{CYAN}[2]{RESET} API Clean Structure: Clean and modular API structure{RESET}')
+    print(f'{CYAN}[3]{RESET} Site Structure: Structure for web applications{RESET}')
+
+print_project_options()
