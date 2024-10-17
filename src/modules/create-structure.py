@@ -4,7 +4,7 @@ import venv
 import os
 from src.utils.system_utils import *
 from src.utils.style_output import *
-from docs.structures import *
+from config.structures import *
 
 class CreateStructure:
     def __init__(self):
@@ -38,12 +38,12 @@ class CreateStructure:
     def choice_structure(self):
         while True:
             try:
+                print_project_options()
                 choice_structure = input(F'{CYAN}\n[$] {RESET}')
                 
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
                     return choice_structure
-                
                 
                 else:
                     sleep(0.8)
@@ -69,7 +69,19 @@ class CreateStructure:
         match choice_structure:
             case 1:
                 sleep(0.8)
-                self.subdirectories = STRUCTURE_ONE
+                self.subdirectories = SCALABLE_STRUCTURE
+                clear_screen()
+                print_welcome_message()
+
+            case 2:
+                sleep(0.8)
+                self.subdirectories = API_CLEAN_STRUCTURE
+                clear_screen()
+                print_welcome_message()
+
+            case 3:
+                sleep(0.8)
+                self.subdirectories = SITE_STRUCTURE
                 clear_screen()
                 print_welcome_message()
             
