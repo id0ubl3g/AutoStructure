@@ -12,6 +12,7 @@ class CreateStructure:
         self.root_directory: str = "projects"
         self.subdirectories: dict = {}
         self.directory_not_exists: bool = None
+        self.init_files: list = ['README.md', '.gitignore', '.env', '.env.example']
 
     def get_current_directory(self):
         return os.getcwd()
@@ -115,7 +116,19 @@ class CreateStructure:
         except Exception:
             sleep(0.8)
             print_error_unexpected()
-            
+
+    def create_files(self, project_name):
+        for file in self.init_files:
+            sleep(0.8)
+            create_file = os.path.join(self.new_directory_path, file)
+            if 'README.md' in create_file:
+                with open(create_file, 'w') as file:
+                    file.write(project_name)
+
+            else:
+                with open(create_file, 'w') as file:
+                    file.write('')
+                    
     def create_virtualenv(self):
         try:
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
@@ -152,6 +165,7 @@ class CreateStructure:
             self.create_root_directory()
             self.pull_structure()
             self.create_subdirectories()
+            self.create_files(self.project_name)
             self.create_virtualenv()
         
         except KeyboardInterrupt:
