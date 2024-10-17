@@ -118,19 +118,30 @@ class CreateStructure:
             print_error_unexpected()
 
     def create_files(self, project_name):
-        for file in self.init_files:
-            sleep(0.8)
-            create_file = os.path.join(self.new_directory_path, file)
-            
-            print_create_file(file)
-            
-            if 'README.md' in create_file:
-                with open(create_file, 'w') as file:
-                    file.write(project_name)
+        try:
+            for file in self.init_files:
+                sleep(0.8)
+                create_file = os.path.join(self.new_directory_path, file)
+                
+                print_create_file(file)
+                
+                if 'README.md' in create_file:
+                    with open(create_file, 'w') as file:
+                        file.write(project_name)
 
-            else:
-                with open(create_file, 'w') as file:
-                    file.write('')
+                else:
+                    with open(create_file, 'w') as file:
+                        file.write('')
+        
+        except KeyboardInterrupt:
+                sleep(0.8)
+                print_interrupted_message()
+                sys.exit(1)
+
+        except Exception:
+            sleep(0.8)
+            print_error_unexpected()
+        
                     
     def create_virtualenv(self):
         try:
