@@ -61,3 +61,6 @@ def print_project_options():
     print(f'{CYAN}[2]{RESET} API Clean Structure: Clean and modular API structure{RESET}')
     print(f'{CYAN}[3]{RESET} Site Structure: Structure for web applications{RESET}')
     
+def print_create_file(file_name):
+    print(f'\n{CYAN}[+]{RESET} Creating file: {WHITE}{file_name}{RESET}')
+

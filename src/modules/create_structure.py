@@ -121,6 +121,9 @@ class CreateStructure:
         for file in self.init_files:
             sleep(0.8)
             create_file = os.path.join(self.new_directory_path, file)
+            
+            print_create_file(file)
+            
             if 'README.md' in create_file:
                 with open(create_file, 'w') as file:
                     file.write(project_name)
