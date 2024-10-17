@@ -1,7 +1,8 @@
 from time import sleep
-import sys
 import venv
+import sys
 import os
+
 from src.utils.system_utils import *
 from src.utils.style_output import *
 from config.structures import *
@@ -162,5 +163,3 @@ class CreateStructure:
             sleep(0.8)
             print_error_unexpected()
             sys.exit(1)
-
-CreateStructure().execute()

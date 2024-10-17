@@ -60,5 +60,4 @@ def print_project_options():
     print(f'{CYAN}[1]{RESET} Scalabre Structure: Basic scalable structure{RESET}')
     print(f'{CYAN}[2]{RESET} API Clean Structure: Clean and modular API structure{RESET}')
     print(f'{CYAN}[3]{RESET} Site Structure: Structure for web applications{RESET}')
-
-print_project_options()
+    
