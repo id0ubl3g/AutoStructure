@@ -119,15 +119,38 @@ class CreateStructure:
 
     def create_files(self, project_name):
         try:
+            sleep(0.8)
+            src_schemas_path = os.path.join(self.new_directory_path, 'src', 'schemas')
+            app_schemas_path = os.path.join(self.new_directory_path, 'app', 'schemas')
+
+            if os.path.exists(src_schemas_path):
+                gitkeep_path = os.path.join(src_schemas_path, '.gitkeep')
+                with open(gitkeep_path, 'w') as file:
+                    file.write('')
+
+                print_create_file('.gitkeep')
+
+            if os.path.exists(app_schemas_path):
+                gitkeep_path = os.path.join(app_schemas_path, '.gitkeep')
+                with open(gitkeep_path, 'w') as file:
+                    file.write('')
+                    
+                print_create_file('.gitkeep')
+
+
             for file in self.init_files:
                 sleep(0.8)
+
                 create_file = os.path.join(self.new_directory_path, file)
-                
                 print_create_file(file)
                 
                 if 'README.md' in create_file:
                     with open(create_file, 'w') as file:
                         file.write(project_name)
+
+                elif '.gitignore' in create_file:
+                    with open(create_file, 'w') as file:
+                        file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
 
                 else:
                     with open(create_file, 'w') as file:
