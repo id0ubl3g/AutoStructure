@@ -6,13 +6,14 @@ import os
 from src.utils.system_utils import *
 from src.utils.style_output import *
 from config.structures import *
+from config.liceses import *
 
 class CreateStructure:
     def __init__(self):
         self.root_directory: str = "projects"
         self.subdirectories: dict = {}
         self.directory_not_exists: bool = None
-        self.init_files: list = ['README.md', '.gitignore', '.env', '.env.example']
+        self.init_files: list = ['README.md', '.gitignore', '.env', '.env.example', 'LICENSE']
 
     def get_current_directory(self):
         return os.getcwd()
@@ -151,6 +152,10 @@ class CreateStructure:
                 elif '.gitignore' in create_file:
                     with open(create_file, 'w') as file:
                         file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
+                
+                elif 'LICENSE' in create_file:
+                    with open(create_file, 'w') as file:
+                        file.write(MIT)
 
                 else:
                     with open(create_file, 'w') as file:
@@ -165,7 +170,6 @@ class CreateStructure:
             sleep(0.8)
             print_error_unexpected()
         
-                    
     def create_virtualenv(self):
         try:
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
