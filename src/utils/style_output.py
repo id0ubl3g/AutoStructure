@@ -73,3 +73,16 @@ def print_license_options():
 
 def print_create_license(license_name):
     print(f'\n{CYAN}[+]{RESET} Creating license: {WHITE}{license_name}{RESET}')
+
+def print_success_message(directory_name):
+    print(rf'''
+        {CYAN}[+]{RESET} Your project is ready to use at: {WHITE}{directory_name}{RESET}
+        {CYAN}[+]{RESET} Virtual environment setup complete
+        {CYAN}[+]{RESET} Ready to code! Start by activating the environment with: 
+            
+            {WHITE}source venv/bin/activate{RESET}
+
+        {CYAN}Good luck and happy coding!{RESET}
+''')
+
+print_success_message('/home/george/Desktop/George/AutoStructure')
