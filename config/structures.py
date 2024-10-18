@@ -12,14 +12,14 @@ SCALABLE_STRUCTURE = {
 }
 
 API_CLEAN_STRUCTURE = {
-    'src': [
-        'app',
-        'app/utils',
-        'app/models',
-        'app/routes',
-        'app/controllers',
-        'app/schemas',
-        'app/middlewares/'
+    'app': [
+        'views',
+        'models',
+        'routes',
+        'controllers',
+        'schemas',
+        'middlewares'
+        'utils'
     ],
 
     'tests': [],
@@ -28,19 +28,15 @@ API_CLEAN_STRUCTURE = {
 }
 
 SITE_STRUCTURE = {
-    'src': [
-        'app',
-        'app/utils',              
-        'app/models',            
-        'app/routes',          
-        'app/controllers',
-        'app/schemas',
-        'app/middlewares',
-        'app/templates',
-        'app/static',
-        'app/static/css',
-        'app/static/js',
-        'app/static/img',
+    'app': [
+        'utils',              
+        'models',            
+        'routes',          
+        'controllers',
+        'schemas',
+        'middlewares',
+        'templates',
+        'static',
     ],
 
     'tests': [],                  
