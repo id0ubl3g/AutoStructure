@@ -29,7 +29,7 @@ def print_welcome_message():
 def print_create_root_directory(directory_name):
     print(f'\n{CYAN}[+]{RESET} Creating root directory at: {WHITE}{directory_name}{RESET}')
 
-def print_directory_exists(directory_name): #ALTERNATIVE
+def print_directory_exists(directory_name):
     print(f'{CYAN}[i]{RESET} Directory already exists: {WHITE}{directory_name}{RESET}')
 
 def print_create_subdirectory(subdirectory):
@@ -50,10 +50,10 @@ def print_interrupted_message():
 def print_structure_created(directory_name):
     print(f'\n{CYAN}[+]{RESET} Project structure created successfully at: {WHITE}{directory_name}{RESET}')
 
-def print_structure_exists(directory_name): #ALTERNATIVE
+def print_structure_exists(directory_name):
     print(f'\n{ORANGE}[i]{RESET} Project structure already exists at: {WHITE}{directory_name}{RESET}')
 
-def print_invalid_value(message):  # Função para imprimir mensagem de valor inválido
+def print_invalid_value(message):
     print(f'\n{ORANGE}[i]{RESET} Invalid value: {WHITE}{message}{RESET}')
 
 def print_error_unexpected():
@@ -80,6 +80,7 @@ def print_create_license(license_name):
 
 def print_success_message(directory_name):
     activation_command = "source venv/bin/activate"
+    
     if platform.system() == "Windows":
         activation_command = r"venv\Scripts\activate"
 
@@ -88,6 +89,7 @@ def print_success_message(directory_name):
         {CYAN}[+]{RESET} Virtual environment setup complete
         {CYAN}[+]{RESET} Ready to code! Start by activating the environment with: 
             
+            {WHITE}cd {directory_name}{RESET}
             {WHITE}{activation_command}{RESET}
 
         {CYAN}Good luck and happy coding!{RESET}
@@ -96,14 +98,7 @@ def print_success_message(directory_name):
 def loading_animation():
     loading_symbols = ['|', '/', '-', '\\']
     for i in range(20):
-        sys.stdout.write(f'\r\t{CYAN}Loading... {loading_symbols[i % len(loading_symbols)]}{RESET}')  # Adiciona uma tabulação
+        sys.stdout.write(f'\r\t{CYAN}Loading... {loading_symbols[i % len(loading_symbols)]}{RESET}')
         sys.stdout.flush()
         time.sleep(0.2)
-    print(f'\r\t{CYAN}Loading complete!{RESET}') 
-
-
-print_welcome_message()
-
-loading_animation()
-
-print_success_message('/home/george/Desktop/George/AutoStructure')
+    print(f'\r\t{CYAN}Loading complete!{RESET}')

@@ -166,7 +166,6 @@ class CreateStructure:
                             with open(create_file, 'w') as file:
                                 file.write(MIT)
 
-                            sleep(0.5)  
                             print_create_license('MIT')
 
                         case '2':
@@ -174,7 +173,6 @@ class CreateStructure:
                             with open(create_file, 'w') as file:
                                 file.write(GNU)
                             
-                            sleep(0.5)
                             print_create_license('GNU')
 
                         case '3':
@@ -182,7 +180,6 @@ class CreateStructure:
                             with open(create_file, 'w') as file:
                                 file.write(APACHE)
                             
-                            sleep(0.5)  
                             print_create_license('APACHE')
 
                         case _:
@@ -211,8 +208,12 @@ class CreateStructure:
             if not os.path.exists(virtualenv_path):          
                 sleep(0.5)
                 venv.create(virtualenv_path, with_pip=True)
+                clear_screen()
+                print_welcome_message()
+                loading_animation()
                 print_create_environment(virtualenv_path)
 
+                sleep(2)
             else:
                 sleep(0.5)
                 print_environment_exists(virtualenv_path)
@@ -243,6 +244,9 @@ class CreateStructure:
             self.create_subdirectories()
             self.create_files(self.project_name)
             self.create_virtualenv()
+            clear_screen()
+            print_welcome_message()
+            print_success_message(self.new_directory_path)
         
         except KeyboardInterrupt:
             sleep(0.5)
