@@ -64,3 +64,9 @@ def print_project_options():
 def print_create_file(file_name):
     print(f'\n{CYAN}[+]{RESET} Creating file: {WHITE}{file_name}{RESET}')
 
+
+def print_license_options():
+    print(f'\n{CYAN}[+]{RESET}{BOLD} Select a license for your project:{RESET}\n')
+    print(f'{CYAN}[1]{RESET} MIT License{RESET}')
+    print(f'{CYAN}[2]{RESET} GNU General Public License{RESET}')
+    print(f'{CYAN}[3]{RESET} Apache License 2.0{RESET}')

@@ -154,8 +154,27 @@ class CreateStructure:
                         file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
                 
                 elif 'LICENSE' in create_file:
-                    with open(create_file, 'w') as file:
-                        file.write(MIT)
+                    print_license_options()
+                    choice_license = input(F'{CYAN}\n[$] {RESET}')
+                    match choice_license:
+                        case '1':
+                            with open(create_file, 'w') as file:
+                                file.write(MIT)
+
+                        case '2':
+                            with open(create_file, 'w') as file:
+                                file.write(GNU)
+
+                        case '3':
+                            with open(create_file, 'w') as file:
+                                file.write(APACHE)
+
+                        case _:
+                            sleep(0.8)
+                            clear_screen()
+                            print_welcome_message()
+                            print_invalid_value(choice_license)
+                            self.create_files(project_name)
 
                 else:
                     with open(create_file, 'w') as file:
