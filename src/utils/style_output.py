@@ -70,3 +70,6 @@ def print_license_options():
     print(f'{CYAN}[1]{RESET} MIT License{RESET}')
     print(f'{CYAN}[2]{RESET} GNU General Public License{RESET}')
     print(f'{CYAN}[3]{RESET} Apache License 2.0{RESET}')
+
+def print_create_license(license_name):
+    print(f'\n{CYAN}[+]{RESET} Creating license: {WHITE}{license_name}{RESET}')
