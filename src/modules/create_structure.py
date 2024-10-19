@@ -1,5 +1,6 @@
 from time import sleep
 import subprocess
+import threading
 import tempfile
 import shutil
 import venv
@@ -31,15 +32,28 @@ class CreateStructure:
         return self.directory_not_exists
     
     def create_root_directory(self):
-        if self.directory_not_exists:
-            sleep(2)
-            os.makedirs(self.new_directory_path, exist_ok=True)
-            print_create_root_directory(self.new_directory_path)
-        
-        else:
-            sleep(2)
-            print_directory_exists(self.new_directory_path)
-            sys.exit(1)
+        try:
+            if self.directory_not_exists:
+                sleep(2)
+                os.makedirs(self.new_directory_path, exist_ok=True)
+                print_create_root_directory(self.new_directory_path)
+            
+            else:
+                sleep(2)
+                print_directory_exists(self.new_directory_path)
+                sys.exit(1)
+
+        except KeyboardInterrupt:
+                sleep(0.5)
+                print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
+                sys.exit(1)
+
+        except Exception:
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_error_unexpected()
             
     def choice_structure(self):
         while True:
@@ -118,7 +132,6 @@ class CreateStructure:
                     print_welcome_message()
                     print_invalid_value(choice_structure)
 
-            
     def create_subdirectories(self):
         try:
             for subdirectory, subsubdirs in self.subdirectories.items():
@@ -141,6 +154,8 @@ class CreateStructure:
         
         except Exception:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_error_unexpected()
 
     def create_files(self, project_name):
@@ -247,9 +262,37 @@ class CreateStructure:
                 sys.exit(1)
 
             except subprocess.CalledProcessError:
-                print('instalar o venv \n')
-                subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True)
-                shutil.rmtree(temp_dir)
+                clear_screen()
+                print_welcome_message()
+                print_venv_not_installed()
+
+                choice_install = input(f'{CYAN}\n[$] {RESET}')
+
+                if choice_install == 'y':
+                    sleep(0.5)
+                    clear_screen()
+                    print_welcome_message()
+
+                    loading_thread = threading.Thread(target=download_bar)
+                    loading_thread.start()
+                    subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    loading_thread.join()
+                    shutil.rmtree(temp_dir)
+
+                elif choice_install == 'n':
+                    sleep(0.5)
+                    clear_screen()
+                    print_welcome_message()
+                    print_venv_information()
+                    sys.exit(1)
+
+                else:
+                    sleep(0.5)
+                    clear_screen()
+                    print_welcome_message()
+                    print_invalid_value(choice_install)
+                    self.create_virtualenv()
+                    
 
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
             if not os.path.exists(virtualenv_path):          
@@ -273,6 +316,8 @@ class CreateStructure:
 
         except Exception:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_error_unexpected()
     
     def execute(self):
@@ -303,6 +348,4 @@ class CreateStructure:
             sys.exit(1)
 
         except Exception:
-            sleep(0.5)
-            print_error_unexpected()
             sys.exit(1)

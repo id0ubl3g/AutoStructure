@@ -106,6 +106,34 @@ def loading_animation():
     print(f'\r\t{CYAN}Loading complete!{RESET}')
 
 def print_directory_removed(directory_path):
-    print(f'\n{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
+    print(f'{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
 
-print_directory_removed('/home/george/Desktop/George/AutoStructure')
+def download_bar():
+    progress = 0
+    bar_length = 50
+    print('\n')
+    while progress <= 100:
+        percent = progress
+        filled_length = int(bar_length * progress // 100)
+        bar = '█' * filled_length + '-' * (bar_length - filled_length)
+
+        sys.stdout.write(f'''\r\t{CYAN}Downloading... |{bar}| {percent:.2f}%{RESET}''')
+        sys.stdout.flush()
+        time.sleep(0.1)
+        progress += 1
+
+    print(f'\r\t{CYAN}Download complete! {RESET}')
+
+def print_venv_not_installed():
+    print(f'\n{ORANGE}[i]{RESET} The "venv" module is not installed. Would you like to install it? (y/n)')
+
+def print_venv_information():
+
+    install_venv = "sudo apt install python3.12-venv"
+
+    if platform.system() == "Windows":
+        install_venv = "py -m pip install virtualenv"
+
+    print(f'\n{ORANGE}[i]{RESET} Please install it manually using the following command:')
+    print(f'\n\t{install_venv}')
+    print(f'\n{GREEN}[+]{RESET} For more information, visit: https://docs.python.org/3/library/venv.html')
