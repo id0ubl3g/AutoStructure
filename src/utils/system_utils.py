@@ -1,5 +1,7 @@
 import platform
 import argparse
+import termios
+import tty
 import sys
 import os
 
@@ -26,3 +28,18 @@ def clear_screen():
         os.system('clear')
     else:
         os.system('cls')
+
+old_settings = None
+
+def disable_input():
+    global old_settings
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd) 
+    tty.setraw(fd)
+
+def enable_input():
+    global old_settings
+    if old_settings is not None: 
+        fd = sys.stdin.fileno()
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        old_settings = None

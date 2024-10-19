@@ -33,13 +33,12 @@ class CreateStructure:
     
     def create_root_directory(self):
         try:
+            sleep(2)
             if self.directory_not_exists:
-                sleep(2)
                 os.makedirs(self.new_directory_path, exist_ok=True)
                 print_create_root_directory(self.new_directory_path)
             
             else:
-                sleep(2)
                 print_directory_exists(self.new_directory_path)
                 sys.exit(1)
 
@@ -57,14 +56,14 @@ class CreateStructure:
             clear_screen()
             print_welcome_message()
             print_error_unexpected()
-            
+
     def choice_structure(self):
         while True:
             try:
                 sleep(2)
                 print_project_options()
                 choice_structure = input(F'{CYAN}\n[$] {RESET}')
-                sleep(0.5)
+                sleep(1)
 
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
@@ -97,19 +96,19 @@ class CreateStructure:
             choice_structure = self.choice_structure()
             match choice_structure:
                 case 1:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = SCALABLE_STRUCTURE
                     clear_screen()
                     print_welcome_message()
 
                 case 2:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = API_CLEAN_STRUCTURE
                     clear_screen()
                     print_welcome_message()
 
                 case 3:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = SITE_STRUCTURE
                     clear_screen()
                     print_welcome_message()
@@ -187,7 +186,7 @@ class CreateStructure:
 
 
             for file in self.init_files:
-                sleep(0.5)
+                sleep(0.3)
 
                 create_file = os.path.join(self.new_directory_path, file)
                 print_create_file(file)
@@ -201,35 +200,35 @@ class CreateStructure:
                         file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
                 
                 elif 'LICENSE' in create_file:
+                    sleep(0.5)
                     clear_screen()
                     print_welcome_message()
-                    sleep(0.5)
                     print_license_options()
-                    choice_license = input(F'{CYAN}\n[$] {RESET}')
+
+                    choice_license = int(input(F'{CYAN}\n[$] {RESET}'))
+                    sleep(1)
+
                     match choice_license:
-                        case '1':
+                        case 1:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(MIT)
 
-                                sleep(1)
                             print_create_license('MIT')
-                            sleep(0.5)
 
-                        case '2':
+                        case 2:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(GNU)
                             
-                                sleep(1)
                             print_create_license('GNU')
-                            sleep(0.5)
 
-                        case '3':
+                        case 3:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(APACHE)
                             
-                                sleep(1)
                             print_create_license('APACHE')
-                            sleep(0.5)
 
                         case _:
                             sleep(0.5)
@@ -239,6 +238,7 @@ class CreateStructure:
                             self.create_files(project_name)
 
                 else:
+                    sleep(0.5)
                     with open(create_file, 'w') as file:
                         file.write('')
         
@@ -259,6 +259,7 @@ class CreateStructure:
         
     def create_virtualenv(self):
         try:
+            sleep(2)
             temp_dir = tempfile.mkdtemp()
             try:
                 virtualenv_path = os.path.join(self.new_directory_path, '.venv')
@@ -278,23 +279,43 @@ class CreateStructure:
             except subprocess.CalledProcessError:
                 clear_screen()
                 print_welcome_message()
-                
+
                 while True: 
+                    sleep(0.5)
                     print_venv_not_installed()
-                    choice_install = input(f'{CYAN}\n[$] {RESET}')
+                    choice_install = str(input(f'{CYAN}\n[$] {RESET}'))
+                    sleep(1)
 
                     if choice_install.lower() == 'y':
+                        import signal
                         sleep(0.5)
                         clear_screen()
                         print_welcome_message()
 
+                        signal.signal(signal.SIGINT, signal.SIG_IGN)
+                        disable_input()
+
                         loading_thread = threading.Thread(target=download_bar)
                         loading_thread.start()
-
-                        subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                         
+                        subprocess.run([
+                            "sudo", 
+                            "apt", 
+                            "install", 
+                            "python3.12-venv", 
+                            "-y"],
+
+                        check=True,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                        )                   
+
                         loading_thread.join()
                         shutil.rmtree(temp_dir)
+                        
+                        signal.signal(signal.SIGINT, signal.default_int_handler)
+                        enable_input()
+
                         return
 
                     elif choice_install.lower() == 'n':
@@ -320,6 +341,8 @@ class CreateStructure:
 
             else:
                 sleep(0.5)
+                clear_screen()
+                print_welcome_message()
                 print_environment_exists(virtualenv_path)
         
         except KeyboardInterrupt:
@@ -336,7 +359,7 @@ class CreateStructure:
             clear_screen()
             print_welcome_message()
             print_error_unexpected()
-    
+                
     def execute(self):
         try:
             args = parse_arguments()
