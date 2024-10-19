@@ -1,6 +1,8 @@
 from time import sleep
-import venv
+import subprocess
+import tempfile
 import shutil
+import venv
 import sys
 import os
 
@@ -232,6 +234,23 @@ class CreateStructure:
         
     def create_virtualenv(self):
         try:
+            temp_dir = tempfile.mkdtemp()
+            try:
+                subprocess.run(["python3.12", "-m", "venv", os.path.join(temp_dir, "test_env")], check=True)
+                return
+            
+            except KeyboardInterrupt:
+                sleep(0.5)
+                print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
+                shutil.rmtree(temp_dir)
+                sys.exit(1)
+
+            except subprocess.CalledProcessError:
+                print('instalar o venv \n')
+                subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True)
+                shutil.rmtree(temp_dir)
+
             virtualenv_path = os.path.join(self.new_directory_path, '.venv')
             if not os.path.exists(virtualenv_path):          
                 sleep(0.5)
