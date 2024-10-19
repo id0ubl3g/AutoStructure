@@ -106,7 +106,7 @@ def loading_animation():
     print(f'\r\t{CYAN}Loading complete!{RESET}')
 
 def print_directory_removed(directory_path):
-    print(f'{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
+    print(f'\n{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
 
 def download_bar():
     progress = 0
@@ -114,10 +114,10 @@ def download_bar():
     print('\n')
     while progress <= 100:
         percent = progress
-        filled_length = int(bar_length * progress // 100)
+        filled_length = int(bar_length * (progress / 100))
         bar = '█' * filled_length + '-' * (bar_length - filled_length)
 
-        sys.stdout.write(f'''\r\t{CYAN}Downloading... |{bar}| {percent:.2f}%{RESET}''')
+        print(f'\r\t{CYAN}Downloading... |{bar}| {percent:.2f}%{RESET}', end='')
         sys.stdout.flush()
         time.sleep(0.1)
         progress += 1

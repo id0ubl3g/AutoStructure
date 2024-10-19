@@ -44,10 +44,13 @@ class CreateStructure:
                 sys.exit(1)
 
         except KeyboardInterrupt:
-                sleep(0.5)
-                print_interrupted_message()
-                shutil.rmtree(self.new_directory_path)
-                sys.exit(1)
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
 
         except Exception:
             sleep(0.5)
@@ -124,6 +127,7 @@ class CreateStructure:
                 print_welcome_message()
                 print_interrupted_message()
                 shutil.rmtree(self.new_directory_path)
+                print_directory_removed(self.new_directory_path)
                 sys.exit(1)
 
         except Exception:
@@ -148,8 +152,11 @@ class CreateStructure:
         
         except KeyboardInterrupt:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_interrupted_message()
             shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
             sys.exit(1)
         
         except Exception:
@@ -236,10 +243,13 @@ class CreateStructure:
                         file.write('')
         
         except KeyboardInterrupt:
-                sleep(0.5)
-                print_interrupted_message()
-                shutil.rmtree(self.new_directory_path)
-                sys.exit(1)
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
 
         except Exception:
             sleep(0.5)
@@ -251,68 +261,75 @@ class CreateStructure:
         try:
             temp_dir = tempfile.mkdtemp()
             try:
+                virtualenv_path = os.path.join(self.new_directory_path, '.venv')
+
                 subprocess.run(["python3.12", "-m", "venv", os.path.join(temp_dir, "test_env")], check=True)
                 return
             
             except KeyboardInterrupt:
                 sleep(0.5)
+                clear_screen()
+                print_welcome_message()
                 print_interrupted_message()
                 shutil.rmtree(self.new_directory_path)
-                shutil.rmtree(temp_dir)
+                print_directory_removed(self.new_directory_path)
                 sys.exit(1)
 
             except subprocess.CalledProcessError:
                 clear_screen()
                 print_welcome_message()
-                print_venv_not_installed()
+                
+                while True: 
+                    print_venv_not_installed()
+                    choice_install = input(f'{CYAN}\n[$] {RESET}')
 
-                choice_install = input(f'{CYAN}\n[$] {RESET}')
+                    if choice_install.lower() == 'y':
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
 
-                if choice_install == 'y':
-                    sleep(0.5)
-                    clear_screen()
-                    print_welcome_message()
+                        loading_thread = threading.Thread(target=download_bar)
+                        loading_thread.start()
 
-                    loading_thread = threading.Thread(target=download_bar)
-                    loading_thread.start()
-                    subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                    loading_thread.join()
-                    shutil.rmtree(temp_dir)
+                        subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        
+                        loading_thread.join()
+                        shutil.rmtree(temp_dir)
+                        return
 
-                elif choice_install == 'n':
-                    sleep(0.5)
-                    clear_screen()
-                    print_welcome_message()
-                    print_venv_information()
-                    sys.exit(1)
+                    elif choice_install.lower() == 'n':
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
+                        print_venv_information()
+                        sys.exit(1)
 
-                else:
-                    sleep(0.5)
-                    clear_screen()
-                    print_welcome_message()
-                    print_invalid_value(choice_install)
-                    self.create_virtualenv()
-                    
+                    else:
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
+                        print_invalid_value(choice_install)
 
-            virtualenv_path = os.path.join(self.new_directory_path, '.venv')
             if not os.path.exists(virtualenv_path):          
                 sleep(0.5)
                 venv.create(virtualenv_path, with_pip=True)
                 clear_screen()
                 print_welcome_message()
-                loading_animation()
                 print_create_environment(virtualenv_path)
-
                 sleep(2)
+
             else:
                 sleep(0.5)
                 print_environment_exists(virtualenv_path)
         
         except KeyboardInterrupt:
-                sleep(0.5)
-                print_interrupted_message()
-                shutil.rmtree(self.new_directory_path)
-                sys.exit(1)
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
 
         except Exception:
             sleep(0.5)
@@ -331,20 +348,29 @@ class CreateStructure:
             self.project_name = args.project_name
             clear_screen()
             print_welcome_message()
+
             self.check_directory_exists(self.project_name)
             self.create_root_directory()
             self.pull_structure()
             self.create_subdirectories()
             self.create_files(self.project_name)
             self.create_virtualenv()
+
+            clear_screen()
+            print_welcome_message()
+            loading_animation()
+
             clear_screen()
             print_welcome_message()
             print_success_message(self.new_directory_path)
         
         except KeyboardInterrupt:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_interrupted_message()
             shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
             sys.exit(1)
 
         except Exception:
