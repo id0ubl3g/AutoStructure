@@ -6,6 +6,8 @@ YELLOW = "\033[33m"
 RED = '\033[91m'
 CYAN = '\033[96m'
 ORANGE = "\033[38;5;208m"
+GREEN = '\033[92m'
+
 
 import platform
 import time
@@ -27,7 +29,7 @@ def print_welcome_message():
 ''')
 
 def print_create_root_directory(directory_name):
-    print(f'\n{CYAN}[+]{RESET} Creating root directory at: {WHITE}{directory_name}{RESET}')
+    print(f'\n{GREEN}[v]{RESET} Creating root directory at: {WHITE}{directory_name}{RESET}')
 
 def print_directory_exists(directory_name):
     print(f'{CYAN}[i]{RESET} Directory already exists: {WHITE}{directory_name}{RESET}')
@@ -36,7 +38,7 @@ def print_create_subdirectory(subdirectory):
     print(f'\n{CYAN}[+]{RESET} Creating subdirectory: {WHITE}{subdirectory}{RESET}')
 
 def print_create_environment(virtualenv_path):
-    print(f'\n{CYAN}[+]{RESET} Virtual environment created at: {WHITE}{virtualenv_path}{RESET}')
+    print(f'\n{GREEN}[v]{RESET} Virtual environment created at: {WHITE}{virtualenv_path}{RESET}')
 
 def print_environment_exists(virtualenv_path):
     print(f'\n{ORANGE}[i]{RESET} Virtual environment already exists at: {WHITE}{virtualenv_path}{RESET}')
@@ -60,7 +62,7 @@ def print_error_unexpected():
     print(f'\n{RED}[x]{RESET} An unexpected error occurred.')
 
 def print_project_options():
-    print(f'\n{CYAN}[+]{RESET}{BOLD} Select a project structure to set up:{RESET}\n')
+    print(f'\n{CYAN}[i]{RESET}{BOLD} Select a project structure to set up:{RESET}\n')
     print(f'{CYAN}[1]{RESET} Scalabre Structure: Basic scalable structure{RESET}')
     print(f'{CYAN}[2]{RESET} API Clean Structure: Clean and modular API structure{RESET}')
     print(f'{CYAN}[3]{RESET} Site Structure: Structure for web applications{RESET}')
@@ -70,24 +72,24 @@ def print_create_file(file_name):
 
 
 def print_license_options():
-    print(f'\n{CYAN}[+]{RESET}{BOLD} Select a license for your project:{RESET}\n')
+    print(f'\n{CYAN}[i]{RESET}{BOLD} Select a license for your project:{RESET}\n')
     print(f'{CYAN}[1]{RESET} MIT License{RESET}')
     print(f'{CYAN}[2]{RESET} GNU General Public License{RESET}')
     print(f'{CYAN}[3]{RESET} Apache License 2.0{RESET}')
 
 def print_create_license(license_name):
-    print(f'\n{CYAN}[+]{RESET} Creating license: {WHITE}{license_name}{RESET}')
+    print(f'\n{GREEN}[v]{RESET} License created: {WHITE}{license_name}{RESET}')
 
 def print_success_message(directory_name):
-    activation_command = "source venv/bin/activate"
+    activation_command = "source .venv/bin/activate"
     
     if platform.system() == "Windows":
-        activation_command = r"venv\Scripts\activate"
+        activation_command = r".venv\Scripts\activate"
 
     print(rf'''
-        {CYAN}[+]{RESET} Your project is ready to use at: {WHITE}{directory_name}{RESET}
-        {CYAN}[+]{RESET} Virtual environment setup complete
-        {CYAN}[+]{RESET} Ready to code! Start by activating the environment with: 
+        {GREEN}[v]{RESET} Your project is ready to use at: {WHITE}{directory_name}{RESET}
+        {GREEN}[v]{RESET} Virtual environment setup complete
+        {CYAN}[i]{RESET} Ready to code! Start by activating the environment with: 
             
             {WHITE}cd {directory_name}{RESET}
             {WHITE}{activation_command}{RESET}
@@ -102,3 +104,8 @@ def loading_animation():
         sys.stdout.flush()
         time.sleep(0.2)
     print(f'\r\t{CYAN}Loading complete!{RESET}')
+
+def print_directory_removed(directory_path):
+    print(f'\n{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
+
+print_directory_removed('/home/george/Desktop/George/AutoStructure')

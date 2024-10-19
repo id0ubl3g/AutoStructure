@@ -1,5 +1,6 @@
 from time import sleep
 import venv
+import shutil
 import sys
 import os
 
@@ -29,21 +30,23 @@ class CreateStructure:
     
     def create_root_directory(self):
         if self.directory_not_exists:
-            sleep(0.5)
+            sleep(2)
             os.makedirs(self.new_directory_path, exist_ok=True)
             print_create_root_directory(self.new_directory_path)
         
         else:
-            sleep(0.5)
+            sleep(2)
             print_directory_exists(self.new_directory_path)
             sys.exit(1)
             
     def choice_structure(self):
         while True:
             try:
+                sleep(2)
                 print_project_options()
                 choice_structure = input(F'{CYAN}\n[$] {RESET}')
-                
+                sleep(0.5)
+
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
                     return choice_structure
@@ -59,6 +62,8 @@ class CreateStructure:
                     clear_screen()
                     print_welcome_message()
                     print_interrupted_message()
+                    shutil.rmtree(self.new_directory_path)
+                    print_directory_removed(self.new_directory_path)
                     sys.exit(1)
 
             except Exception:
@@ -68,33 +73,49 @@ class CreateStructure:
                         print_invalid_value(choice_structure)
 
     def pull_structure(self):
-        sleep(2)
-        choice_structure = self.choice_structure()
-        match choice_structure:
-            case 1:
-                sleep(0.5)
-                self.subdirectories = SCALABLE_STRUCTURE
-                clear_screen()
-                print_welcome_message()
+        try:
+            sleep(0.5)
+            choice_structure = self.choice_structure()
+            match choice_structure:
+                case 1:
+                    sleep(0.5)
+                    self.subdirectories = SCALABLE_STRUCTURE
+                    clear_screen()
+                    print_welcome_message()
 
-            case 2:
-                sleep(0.5)
-                self.subdirectories = API_CLEAN_STRUCTURE
-                clear_screen()
-                print_welcome_message()
+                case 2:
+                    sleep(0.5)
+                    self.subdirectories = API_CLEAN_STRUCTURE
+                    clear_screen()
+                    print_welcome_message()
 
-            case 3:
-                sleep(0.5)
-                self.subdirectories = SITE_STRUCTURE
-                clear_screen()
-                print_welcome_message()
+                case 3:
+                    sleep(0.5)
+                    self.subdirectories = SITE_STRUCTURE
+                    clear_screen()
+                    print_welcome_message()
+                
+                case _:
+                    sleep(0.5)
+                    clear_screen()
+                    print_welcome_message()
+                    print_invalid_value(choice_structure)
+                    self.pull_structure()
             
-            case _:
+        except KeyboardInterrupt:
                 sleep(0.5)
                 clear_screen()
                 print_welcome_message()
-                print_invalid_value(choice_structure)
-                self.pull_structure()
+                print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
+                sys.exit(1)
+
+        except Exception:
+                    sleep(0.5)
+                    clear_screen()
+                    print_welcome_message()
+                    print_invalid_value(choice_structure)
+
             
     def create_subdirectories(self):
         try:
@@ -113,6 +134,7 @@ class CreateStructure:
         except KeyboardInterrupt:
             sleep(0.5)
             print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
             sys.exit(1)
         
         except Exception:
@@ -155,32 +177,35 @@ class CreateStructure:
                         file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
                 
                 elif 'LICENSE' in create_file:
-                    sleep(2)
                     clear_screen()
                     print_welcome_message()
+                    sleep(0.5)
                     print_license_options()
                     choice_license = input(F'{CYAN}\n[$] {RESET}')
                     match choice_license:
                         case '1':
-                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(MIT)
 
+                                sleep(1)
                             print_create_license('MIT')
+                            sleep(0.5)
 
                         case '2':
-                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(GNU)
                             
+                                sleep(1)
                             print_create_license('GNU')
+                            sleep(0.5)
 
                         case '3':
-                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(APACHE)
                             
+                                sleep(1)
                             print_create_license('APACHE')
+                            sleep(0.5)
 
                         case _:
                             sleep(0.5)
@@ -196,10 +221,13 @@ class CreateStructure:
         except KeyboardInterrupt:
                 sleep(0.5)
                 print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
                 sys.exit(1)
 
         except Exception:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_error_unexpected()
         
     def create_virtualenv(self):
@@ -221,6 +249,7 @@ class CreateStructure:
         except KeyboardInterrupt:
                 sleep(0.5)
                 print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
                 sys.exit(1)
 
         except Exception:
@@ -251,6 +280,7 @@ class CreateStructure:
         except KeyboardInterrupt:
             sleep(0.5)
             print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
             sys.exit(1)
 
         except Exception:
