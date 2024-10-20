@@ -8,6 +8,7 @@ import venv
 import sys
 import os
 
+from src.utils.sudo_auth import *
 from src.utils.system_utils import *
 from src.utils.style_output import *
 from config.structures import *
@@ -288,6 +289,7 @@ class CreateStructure:
                     sleep(1)
 
                     if choice_install == 'y':
+                        run_sudo()
                         sleep(0.5)
                         clear_screen()
                         print_welcome_message()
