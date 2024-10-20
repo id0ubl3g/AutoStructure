@@ -1,9 +1,14 @@
 from time import sleep
-import venv
+import subprocess
+import threading
+import tempfile
+import signal
 import shutil
+import venv
 import sys
 import os
 
+from src.utils.sudo_auth import *
 from src.utils.system_utils import *
 from src.utils.style_output import *
 from config.structures import *
@@ -29,23 +34,38 @@ class CreateStructure:
         return self.directory_not_exists
     
     def create_root_directory(self):
-        if self.directory_not_exists:
+        try:
             sleep(2)
-            os.makedirs(self.new_directory_path, exist_ok=True)
-            print_create_root_directory(self.new_directory_path)
-        
-        else:
-            sleep(2)
-            print_directory_exists(self.new_directory_path)
-            sys.exit(1)
+            if self.directory_not_exists:
+                os.makedirs(self.new_directory_path, exist_ok=True)
+                print_create_root_directory(self.new_directory_path)
             
+            else:
+                print_directory_exists(self.new_directory_path)
+                sys.exit(1)
+
+        except KeyboardInterrupt:
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
+
+        except Exception:
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_error_unexpected()
+
     def choice_structure(self):
         while True:
             try:
                 sleep(2)
                 print_project_options()
                 choice_structure = input(F'{CYAN}\n[$] {RESET}')
-                sleep(0.5)
+                sleep(1)
 
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
@@ -78,19 +98,19 @@ class CreateStructure:
             choice_structure = self.choice_structure()
             match choice_structure:
                 case 1:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = SCALABLE_STRUCTURE
                     clear_screen()
                     print_welcome_message()
 
                 case 2:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = API_CLEAN_STRUCTURE
                     clear_screen()
                     print_welcome_message()
 
                 case 3:
-                    sleep(0.5)
+                    sleep(2)
                     self.subdirectories = SITE_STRUCTURE
                     clear_screen()
                     print_welcome_message()
@@ -108,6 +128,7 @@ class CreateStructure:
                 print_welcome_message()
                 print_interrupted_message()
                 shutil.rmtree(self.new_directory_path)
+                print_directory_removed(self.new_directory_path)
                 sys.exit(1)
 
         except Exception:
@@ -116,7 +137,6 @@ class CreateStructure:
                     print_welcome_message()
                     print_invalid_value(choice_structure)
 
-            
     def create_subdirectories(self):
         try:
             for subdirectory, subsubdirs in self.subdirectories.items():
@@ -133,12 +153,17 @@ class CreateStructure:
         
         except KeyboardInterrupt:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_interrupted_message()
             shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
             sys.exit(1)
         
         except Exception:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_error_unexpected()
 
     def create_files(self, project_name):
@@ -163,7 +188,7 @@ class CreateStructure:
 
 
             for file in self.init_files:
-                sleep(0.5)
+                sleep(0.3)
 
                 create_file = os.path.join(self.new_directory_path, file)
                 print_create_file(file)
@@ -177,35 +202,35 @@ class CreateStructure:
                         file.write(f'__pycache__/\n\nvenv/\n.env\nschemas/*')
                 
                 elif 'LICENSE' in create_file:
+                    sleep(0.5)
                     clear_screen()
                     print_welcome_message()
-                    sleep(0.5)
                     print_license_options()
-                    choice_license = input(F'{CYAN}\n[$] {RESET}')
+
+                    choice_license = int(input(F'{CYAN}\n[$] {RESET}'))
+                    sleep(1)
+
                     match choice_license:
-                        case '1':
+                        case 1:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(MIT)
 
-                                sleep(1)
                             print_create_license('MIT')
-                            sleep(0.5)
 
-                        case '2':
+                        case 2:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(GNU)
                             
-                                sleep(1)
                             print_create_license('GNU')
-                            sleep(0.5)
 
-                        case '3':
+                        case 3:
+                            sleep(0.5)
                             with open(create_file, 'w') as file:
                                 file.write(APACHE)
                             
-                                sleep(1)
                             print_create_license('APACHE')
-                            sleep(0.5)
 
                         case _:
                             sleep(0.5)
@@ -215,14 +240,18 @@ class CreateStructure:
                             self.create_files(project_name)
 
                 else:
+                    sleep(0.5)
                     with open(create_file, 'w') as file:
                         file.write('')
         
         except KeyboardInterrupt:
-                sleep(0.5)
-                print_interrupted_message()
-                shutil.rmtree(self.new_directory_path)
-                sys.exit(1)
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
 
         except Exception:
             sleep(0.5)
@@ -232,30 +261,107 @@ class CreateStructure:
         
     def create_virtualenv(self):
         try:
-            virtualenv_path = os.path.join(self.new_directory_path, '.venv')
+            sleep(2)
+            temp_dir = tempfile.mkdtemp()
+            try:
+                virtualenv_path = os.path.join(self.new_directory_path, '.venv')
+
+                subprocess.run(["python3.12", "-m", "venv", os.path.join(temp_dir, "test_env")], check=True)
+                return
+            
+            except KeyboardInterrupt:
+                sleep(0.5)
+                clear_screen()
+                print_welcome_message()
+                print_interrupted_message()
+                shutil.rmtree(self.new_directory_path)
+                print_directory_removed(self.new_directory_path)
+                sys.exit(1)
+
+            except subprocess.CalledProcessError:
+                clear_screen()
+                print_welcome_message()
+
+                while True: 
+                    sleep(0.5)
+                    print_venv_not_installed()
+                    choice_install = str(input(f'{CYAN}\n[$] {RESET}')).lower()
+                    sleep(1)
+
+                    if choice_install == 'y':
+                        run_sudo()
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
+
+                        signal.signal(signal.SIGINT, signal.SIG_IGN)
+                        disable_input()
+
+                        loading_thread = threading.Thread(target=download_bar)
+                        loading_thread.start()
+                        
+                        subprocess.run([
+                            "sudo", 
+                            "apt", 
+                            "install", 
+                            "python3.12-venv", 
+                            "-y"],
+
+                        check=True,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                        )                   
+
+                        loading_thread.join()
+                        shutil.rmtree(temp_dir)
+                        
+                        signal.signal(signal.SIGINT, signal.default_int_handler)
+                        enable_input()
+
+                        return
+
+                    elif choice_install == 'n':
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
+                        print_venv_information()
+                        sys.exit(1)
+
+                    else:
+                        sleep(0.5)
+                        clear_screen()
+                        print_welcome_message()
+                        print_invalid_value(choice_install)
+
             if not os.path.exists(virtualenv_path):          
                 sleep(0.5)
                 venv.create(virtualenv_path, with_pip=True)
                 clear_screen()
                 print_welcome_message()
-                loading_animation()
                 print_create_environment(virtualenv_path)
-
                 sleep(2)
+
             else:
                 sleep(0.5)
+                clear_screen()
+                print_welcome_message()
                 print_environment_exists(virtualenv_path)
         
         except KeyboardInterrupt:
-                sleep(0.5)
-                print_interrupted_message()
-                shutil.rmtree(self.new_directory_path)
-                sys.exit(1)
+            sleep(0.5)
+            clear_screen()
+            print_welcome_message()
+            print_interrupted_message()
+            shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
+            sys.exit(1)
 
         except Exception:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_error_unexpected()
-    
+                
     def execute(self):
         try:
             args = parse_arguments()
@@ -267,23 +373,30 @@ class CreateStructure:
             self.project_name = args.project_name
             clear_screen()
             print_welcome_message()
+
             self.check_directory_exists(self.project_name)
             self.create_root_directory()
             self.pull_structure()
             self.create_subdirectories()
             self.create_files(self.project_name)
             self.create_virtualenv()
+
+            clear_screen()
+            print_welcome_message()
+            loading_animation()
+
             clear_screen()
             print_welcome_message()
             print_success_message(self.new_directory_path)
         
         except KeyboardInterrupt:
             sleep(0.5)
+            clear_screen()
+            print_welcome_message()
             print_interrupted_message()
             shutil.rmtree(self.new_directory_path)
+            print_directory_removed(self.new_directory_path)
             sys.exit(1)
 
         except Exception:
-            sleep(0.5)
-            print_error_unexpected()
             sys.exit(1)

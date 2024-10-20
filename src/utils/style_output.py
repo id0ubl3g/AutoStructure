@@ -8,10 +8,10 @@ CYAN = '\033[96m'
 ORANGE = "\033[38;5;208m"
 GREEN = '\033[92m'
 
-
 import platform
 import time
 import sys
+import os
 
 def print_welcome_message():
     print(rf'''{CYAN}
@@ -108,4 +108,52 @@ def loading_animation():
 def print_directory_removed(directory_path):
     print(f'\n{RED}[x]{RESET} Directory removed at: {WHITE}{directory_path}{RESET} due to interruption.')
 
-print_directory_removed('/home/george/Desktop/George/AutoStructure')
+def download_bar():
+    progress = 0
+    bar_length = 50
+    print('\n')
+    while progress <= 100:
+        percent = progress
+        filled_length = int(bar_length * (progress / 100))
+        bar = '█' * filled_length + '-' * (bar_length - filled_length)
+
+        print(f'\r\t{CYAN}Downloading... |{bar}| {percent:.2f}%{RESET}', end='')
+        sys.stdout.flush()
+        time.sleep(0.1)
+        progress += 1
+
+    print(f'\r\t{CYAN}Download complete! {RESET}')
+
+def print_venv_not_installed():
+    print(f'\n{ORANGE}[i]{RESET} The "venv" module is not installed. Would you like to install it? (y/n)')
+
+def print_venv_information():
+
+    install_venv = "sudo apt install python3.12-venv"
+
+    if platform.system() == "Windows":
+        install_venv = "py -m pip install virtualenv"
+
+    print(f'\n{ORANGE}[i]{RESET} Please install it manually using the following command:')
+    print(f'\n\t{install_venv}')
+    print(f'\n{GREEN}[+]{RESET} For more information, visit: https://docs.python.org/3/library/venv.html')
+
+def print_prompt_password_message():
+    print(f'\n{ORANGE}[i]{RESET} Please enter your password to gain root access:')
+    print(f'\n{GREEN}[i]{RESET} After logging in as root@{os.getcwd()},')
+    print(f'\t{ORANGE}press Ctrl+D{RESET} or type {ORANGE}exit{RESET} to continue.')
+    print(f'\n{CYAN}If you are already logged in as root,')
+    print(f'\tjust {ORANGE}press Ctrl+D{RESET} to confirm and proceed with the process.{RESET}\n')
+
+def print_continue_instruction():
+    print(f'\n\t To continue the process at any time, press {ORANGE}Ctrl+D{RESET} or type {ORANGE}exit{RESET}.\n')
+
+def print_already_logged_as_root():
+    print(f'\n{GREEN}[+]{RESET} You are already logged in as root.')
+
+def print_password_or_error():
+    print(f'\n{RED}[x]{RESET} Incorrect password or an unexpected error occurred.')
+
+def print_process_interrupted():
+    print(f'\n{ORANGE}[i]{RESET} Process interrupted')
+
