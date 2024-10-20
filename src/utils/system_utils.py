@@ -1,7 +1,6 @@
 import platform
 import argparse
-import termios
-import tty
+import signal
 import sys
 import os
 
@@ -33,13 +32,34 @@ old_settings = None
 
 def disable_input():
     global old_settings
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd) 
-    tty.setraw(fd)
+
+    if platform.system() == 'Linux':
+        import termios
+        import tty
+
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd) 
+        tty.setraw(fd)
+    
+    else:
+        import msvcrt
+
+        msvcrt.setmode(sys.stdin.fileno(), os.O_BINARY)  
+        sys.stdin = open(os.devnull, 'r')
 
 def enable_input():
     global old_settings
-    if old_settings is not None: 
-        fd = sys.stdin.fileno()
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        old_settings = None
+
+    if platform.system() == 'Linux':
+        import termios
+
+        if old_settings is not None:
+            fd = sys.stdin.fileno()
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            old_settings = None
+
+    else:
+        import msvcrt
+        
+        msvcrt.setmode(sys.stdin.fileno(), os.O_TEXT)  
+        sys.stdin = sys.__stdin__ 

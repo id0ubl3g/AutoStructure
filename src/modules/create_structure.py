@@ -2,6 +2,7 @@ from time import sleep
 import subprocess
 import threading
 import tempfile
+import signal
 import shutil
 import venv
 import sys
@@ -283,11 +284,10 @@ class CreateStructure:
                 while True: 
                     sleep(0.5)
                     print_venv_not_installed()
-                    choice_install = str(input(f'{CYAN}\n[$] {RESET}'))
+                    choice_install = str(input(f'{CYAN}\n[$] {RESET}')).lower()
                     sleep(1)
 
-                    if choice_install.lower() == 'y':
-                        import signal
+                    if choice_install == 'y':
                         sleep(0.5)
                         clear_screen()
                         print_welcome_message()
@@ -318,7 +318,7 @@ class CreateStructure:
 
                         return
 
-                    elif choice_install.lower() == 'n':
+                    elif choice_install == 'n':
                         sleep(0.5)
                         clear_screen()
                         print_welcome_message()
