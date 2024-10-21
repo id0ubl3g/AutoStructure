@@ -1,6 +1,5 @@
 import platform
 import argparse
-import signal
 import sys
 import os
 
@@ -62,4 +61,4 @@ def enable_input():
         import msvcrt
         
         msvcrt.setmode(sys.stdin.fileno(), os.O_TEXT)  
-        sys.stdin = sys.__stdin__ 
+        sys.stdin = sys.__stdin__
