@@ -11,7 +11,6 @@ GREEN = '\033[92m'
 import platform
 import time
 import sys
-import os
 
 def print_welcome_message():
     print(rf'''{CYAN}
@@ -69,7 +68,6 @@ def print_project_options():
     
 def print_create_file(file_name):
     print(f'\n{CYAN}[+]{RESET} Creating file: {WHITE}{file_name}{RESET}')
-
 
 def print_license_options():
     print(f'\n{CYAN}[i]{RESET}{BOLD} Select a license for your project:{RESET}\n')
@@ -139,14 +137,13 @@ def print_venv_information():
     print(f'\n{GREEN}[+]{RESET} For more information, visit: https://docs.python.org/3/library/venv.html')
 
 def print_prompt_password_message():
+    from src.utils.shared.shared import shared_get_current_directory
+    current_directory = shared_get_current_directory()
     print(f'\n{ORANGE}[i]{RESET} Please enter your password to gain root access:')
-    print(f'\n{GREEN}[i]{RESET} After logging in as root@{os.getcwd()},')
-    print(f'\t{ORANGE}press Ctrl+D{RESET} or type {ORANGE}exit{RESET} to continue.')
-    print(f'\n{CYAN}If you are already logged in as root,')
-    print(f'\tjust {ORANGE}press Ctrl+D{RESET} to confirm and proceed with the process.{RESET}\n')
-
-def print_continue_instruction():
-    print(f'\n\t To continue the process at any time, press {ORANGE}Ctrl+D{RESET} or type {ORANGE}exit{RESET}.\n')
+    print(f'\n{GREEN}[i]{RESET} After logging in as root@{current_directory},')
+    print(f'\n\t{ORANGE}press Ctrl+D{RESET} or type {ORANGE}exit{RESET} to continue.')
+    print(f'\n{CYAN}[i]{RESET} If you are already logged in as root,{RESET}')
+    print(f'\n\tjust {ORANGE}press Ctrl+D{RESET} to confirm and proceed with the process.{RESET}\n')
 
 def print_already_logged_as_root():
     print(f'\n{GREEN}[+]{RESET} You are already logged in as root.')
@@ -156,4 +153,3 @@ def print_password_or_error():
 
 def print_process_interrupted():
     print(f'\n{ORANGE}[i]{RESET} Process interrupted')
-

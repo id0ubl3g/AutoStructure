@@ -8,9 +8,9 @@ import venv
 import sys
 import os
 
-from src.utils.sudo_auth import *
-from src.utils.system_utils import *
 from src.utils.style_output import *
+from src.utils.system_utils import *
+from src.utils.sudo_auth import *
 from config.structures import *
 from config.liceses import *
 
@@ -31,7 +31,6 @@ class CreateStructure:
     def check_directory_exists(self, project_name):
         self.new_directory_path = self.concatenate_paths(project_name)
         self.directory_not_exists = not os.path.exists(self.new_directory_path)
-        return self.directory_not_exists
     
     def create_root_directory(self):
         try:
@@ -69,6 +68,7 @@ class CreateStructure:
 
                 if choice_structure.strip():
                     choice_structure = int(choice_structure)
+                    
                     return choice_structure
                 
                 else:
@@ -267,6 +267,7 @@ class CreateStructure:
                 virtualenv_path = os.path.join(self.new_directory_path, '.venv')
 
                 subprocess.run(["python3.12", "-m", "venv", os.path.join(temp_dir, "test_env")], check=True)
+                
                 return
             
             except KeyboardInterrupt:
@@ -300,17 +301,7 @@ class CreateStructure:
                         loading_thread = threading.Thread(target=download_bar)
                         loading_thread.start()
                         
-                        subprocess.run([
-                            "sudo", 
-                            "apt", 
-                            "install", 
-                            "python3.12-venv", 
-                            "-y"],
-
-                        check=True,
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL
-                        )                   
+                        subprocess.run(["sudo", "apt", "install", "python3.12-venv", "-y"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)                   
 
                         loading_thread.join()
                         shutil.rmtree(temp_dir)

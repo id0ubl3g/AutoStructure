@@ -1,10 +1,10 @@
-from src.utils.style_output import *
 from src.utils.system_utils import clear_screen
-
+from src.utils.style_output import *
 from time import sleep
 import subprocess
 import signal
 import sys
+
 
 def handle_sigint(signal_received, frame):
     clear_screen()
@@ -40,13 +40,10 @@ def run_sudo():
 
         signal.signal(signal.SIGINT, handle_sigint)
 
-        subprocess.run([
-            "sudo",
-            "su"],
-        check=True
-        )
+        subprocess.run(["sudo","su"], check=True)
 
         return
+    
     except KeyboardInterrupt:
         clear_screen()
         print_welcome_message()
@@ -58,11 +55,10 @@ def run_sudo():
             clear_screen()
             print_welcome_message()
             print_process_interrupted()
+            sys.exit(0)
+        
         else:
             clear_screen()
             print_welcome_message()
             print_password_or_error()
             sys.exit(1)
-
-if __name__ == "__main__":
-    run_sudo()
